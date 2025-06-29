@@ -1,0 +1,14 @@
+For pong to work, I need to create a window. 
+- I will use NCURSES to make a simple terminal game.
+- I need to know the velocity of the ball (base velocity)
+- Knowing the velocity, I will know how much time it takes to cross the screen
+- Does the ball have both vertical and horizontal velocity? Yes. How does this interact with the
+  paddles? The paddle velocity?
+- Something to keep track of the score.
+- Something to keep track of the time remaining. How long will a round be?
+- Game modes of best of 3 or 5 rounds. 
+- Controls
+- The computer, program the CPU player. How to make it beatable? Can't be perfect, needs flaws but 
+  needs to be somewhat competent or game is unplayable. Vary difficulty throughout the game? How 
+  "responsive" and "clinical" the computer is as it's played against.
+- Create a simple menu with the options "Play" and "Exit" with a simple title and graphic of Pong and   an ascii circle.
