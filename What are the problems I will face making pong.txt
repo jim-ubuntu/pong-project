@@ -12,3 +12,4 @@ For pong to work, I need to create a window.
   needs to be somewhat competent or game is unplayable. Vary difficulty throughout the game? How 
   "responsive" and "clinical" the computer is as it's played against.
 - Create a simple menu with the options "Play" and "Exit" with a simple title and graphic of Pong and   an ascii circle.
+-Use mersenne twister for PRNG.

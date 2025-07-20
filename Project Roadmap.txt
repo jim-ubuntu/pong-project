@@ -1,0 +1,33 @@
+Menu:
+
+I will need to create a menu. 
+The menu, must highlight each entry, play or exit so far. 
+Additional entries will be trivial after that.
+Each menu selection will have all a sub procedure that either plays the game, or exits the game. 
+
+---------------------------------------------------------  
+Game:
+
+The game has a start, someone serves or the ball is served by the PC 
+towards one of the players. 
+
+The ball must bounce off of the section that is the paddle
+this must also return at an angle equal to the incidental angle 
+but in the opposit direction. The same must occur when it bounces
+off of the non player sides. 
+
+The ball passing a player, gives the opposing player a point. 
+
+First to 3 points wins. 
+
+Provide an end of game message e.g "Victory" or "Loss"
+
+Notes:
+
+The welcome screen always runs.
+Then the menu runs and the game plays or it exits depending on the choice of the user.
+
+A while loop exists in the menu subroutine, such that the menu will always be returned to, until the player says they no longer wish to play. So in the "menu" sub function, we call the "play" subfunction and upon ending, we ask if they want to play again or exit to main menu. then when back to the main menu, they may either play again, or exit. 
+
+  Simplify the angle of the ball for now, and set it to travel at one angle all game. The ball should bounce off at the same angle as the incident angle. So either the horizontal component of travel, or the vertical component of travel changes depending on what it has bounced off of.
+
