@@ -8,6 +8,7 @@ void welcomeScreen(int xCenter, int yCenter)
 {
   std::string ballArt[5] {"Pong", "---##---\n","-######-\n","-######-\n","---##---" };
   std::string welcomeToPong {"Welcome to pong\n"};
+  attron(COLOR_PAIR(2));
   move(yCenter, xCenter - welcomeToPong.length()/2);
   printw(welcomeToPong.data());
   refresh();
@@ -18,6 +19,7 @@ void welcomeScreen(int xCenter, int yCenter)
     move(yCenter + (3-i), xCenter - ballArt[i].length()/2);
     printw(ballArt[i].data());
   }
+  attroff(COLOR_PAIR(2));
   getch();
   clear();
   refresh();
@@ -27,7 +29,7 @@ void menuScreen(int xCenter, int yCenter)
   WINDOW *menuWindow = newwin(10, 40, yCenter -5, xCenter - 20); 
   std::vector<std::string> menuEntries {"Play", "Exit"};
   int keyPressed {};
-  int selectedIndex {0};
+  uint selectedIndex {0};
   //I want to make an array and enable cycling through the 
     // array and highlighting the selection.
   int menuLength {static_cast<int>(menuEntries.size())};
@@ -39,27 +41,48 @@ void menuScreen(int xCenter, int yCenter)
   while (keyPressed != 'q')
   {
     // wrefresh(menuWindow);
-    keyPressed = getch();
-      if (keyPressed == KEY_DOWN)
-        selectedIndex += 1;
-      else if (keyPressed == KEY_UP)
-        selectedIndex -= 1;
-
+    switch(keyPressed)
+    {
+      case KEY_DOWN:
+        // if (selectedIndex<2)
+        {
+          selectedIndex += 1;
+          break;
+        }
+      case KEY_UP:
+        // if (selectedIndex >0)
+        {
+          selectedIndex -= 1;
+          break;
+        }
+      case '\n':
+        {
+        if (selectedIndex % 2 == 1)
+          {
+          endwin(); 
+          return; 
+          }
+        else if (selectedIndex % 2 ==0)
+            // Will link to play screen from here. 
+            continue;
+        }
+    }
     for (int i {0}; i<2; ++i)
     {
       move(yCenter-1 + i, xCenter - 2);
-      if ((selectedIndex + 2) % 2  == i)
+      if (selectedIndex  %  2  == i)
       {
-      attron(COLOR_PAIR(1));
+      attron(COLOR_PAIR(2));
       printw(menuEntries[i].data());
-      attroff(COLOR_PAIR(1));
+      attroff(COLOR_PAIR(2));
       }
       else 
       {
          printw(menuEntries[i].data());
       }
-
+      
     }
+    keyPressed = getch();
     refresh();
   }
   refresh();
@@ -86,6 +109,7 @@ int main()
   int yCenter {getmaxy(stdscr)/2};
   start_color();
   init_pair(1, COLOR_RED, COLOR_WHITE);
+  init_pair(2, COLOR_GREEN, COLOR_BLACK);
   // cbreak();
   bool menu {true};
   int key {};
