@@ -21,21 +21,47 @@ void welcomeScreen(int xCenter, int yCenter)
   getch();
   clear();
   refresh();
-
 }
-
 void menuScreen(int xCenter, int yCenter)
 {
   WINDOW *menuWindow = newwin(10, 40, yCenter -5, xCenter - 20); 
   std::vector<std::string> menuEntries {"Play", "Exit"};
+  int keyPressed {};
+  int selectedIndex {0};
   //I want to make an array and enable cycling through the 
     // array and highlighting the selection.
   int menuLength {static_cast<int>(menuEntries.size())};
   box(menuWindow, 0,0);
+  refresh();
   wrefresh(menuWindow);
   move(yCenter - 5, xCenter -19);
   printw("Welcome");
-  move(yCenter, xCenter);
+  while (keyPressed != 'q')
+  {
+    // wrefresh(menuWindow);
+    keyPressed = getch();
+      if (keyPressed == KEY_DOWN)
+        selectedIndex += 1;
+      else if (keyPressed == KEY_UP)
+        selectedIndex -= 1;
+
+    for (int i {0}; i<2; ++i)
+    {
+      move(yCenter-1 + i, xCenter - 2);
+      if ((selectedIndex + 2) % 2  == i)
+      {
+      attron(COLOR_PAIR(1));
+      printw(menuEntries[i].data());
+      attroff(COLOR_PAIR(1));
+      }
+      else 
+      {
+         printw(menuEntries[i].data());
+      }
+
+    }
+    refresh();
+  }
   refresh();
   getch();
 
@@ -58,7 +84,8 @@ int main()
   keypad(stdscr, TRUE);
   int xCenter {getmaxx(stdscr)/2};
   int yCenter {getmaxy(stdscr)/2};
-
+  start_color();
+  init_pair(1, COLOR_RED, COLOR_WHITE);
   // cbreak();
   bool menu {true};
   int key {};
