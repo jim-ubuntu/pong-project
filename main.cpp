@@ -3,8 +3,10 @@
 #include <string>
 #include <string_view>
 #include <bits/stdc++.h>
+#include <vector>
 
-void gameplay(int xCenter, int yCenter);
+void gameplay(int xCenter, int yCenter, WINDOW * menuWindow);
+void playAgain(int xCenter, int yCenter, WINDOW * menuWindow);
 
 void welcomeScreen(int xCenter, int yCenter)
 {
@@ -62,7 +64,7 @@ void menuScreen(int xCenter, int yCenter, WINDOW * menuWindow)
           }
         else if (selectedIndex % 2 ==0)
             // Will link to play screen from here. 
-           gameplay(xCenter, yCenter); 
+           gameplay(xCenter, yCenter, menuWindow); 
            break;
         }
     }
@@ -95,7 +97,7 @@ void menuScreen(int xCenter, int yCenter, WINDOW * menuWindow)
 
 }
 
-void gameplay(int xCenter, int yCenter)
+void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
 {
   clear();
   // WINDOW * gameWindow = newwin();
@@ -107,11 +109,71 @@ void gameplay(int xCenter, int yCenter)
     refresh();
     sleep(1);
   }
+  playAgain(xCenter,yCenter,menuWindow);
+  return;
 }
 
-void playAgain(int xCenter, int yCenteri, WINDOW * menuWindow)
+void playAgain(int xCenter, int yCenter, WINDOW * menuWindow)
 {
-  
+  std::vector<std::string> menuEntries {"Play again", "Exit"};
+  constexpr bool endScreen {true};
+  uint selectedIndex {0};
+  int keyPressed {};
+
+  while (endScreen)
+  {
+    switch(keyPressed)
+    {
+      case KEY_DOWN:
+        {
+          selectedIndex +=1;
+          break;
+        }
+      case KEY_UP:
+        {
+          selectedIndex -=1;
+          break;
+        }
+      case '\n':
+      {
+        if (selectedIndex % 2 == 0)
+        {
+          gameplay(xCenter,yCenter,menuWindow);
+          break;
+        }
+        else
+        {
+          endwin();
+          std::exit(0);
+        }
+      }
+        // default:
+        // break;
+    }
+    box(menuWindow, 0,0);
+    wrefresh(menuWindow);
+    move(yCenter - 5, xCenter -19);
+    printw("Game Over");
+    refresh();
+
+    for (int i {0}; i < 2; ++i)
+    {
+      if (selectedIndex % 2 == i)
+      {
+        attron(COLOR_PAIR(3));
+        move(yCenter-1 + i, xCenter);
+        printw(menuEntries[i].data());
+      attroff(COLOR_PAIR(3));
+      }
+      else 
+      {
+        move(yCenter-1 + i, xCenter);
+        printw(menuEntries[i].data());
+      }
+    }
+    refresh();
+    keyPressed = getch();
+  }
 }
 
 int main()
@@ -136,44 +198,9 @@ int main()
   bool menu {true};
   int key {};
 
-  // std::string menuSelect[2] {"Play", "Exit"};
-  // int menuLength = sizeof(menuSelect)/sizeof(menuSelect[0]);
-
-  // WINDOW * win = newwin(10, 40, yCenter - 5, xCenter - 20);
-
-  // box(win, 0, 0);
-
   welcomeScreen(xCenterRef, yCenterRef); 
   menuScreen(xCenterRef, yCenterRef, menuWindow); 
-  // while (menu)
-  // {
-  //   
-  // for (int i {0}; i <= menuLength; ++i)
-  //   {
-  //     move(yCenter -i ,xCenter);
-  //     printw(menuSelect[i].data());
-  //     printw("\n");
-  //   
-  //   }
-  //   // move(yCenter, xCenter);
-  //   // wrefresh(win);
-  //   // refresh();
-  //   key = getch();
-  //   switch(key)
-  //   {
-  //     case KEY_ENTER:
-  //       break;
-  //     case KEY_UP:
-  //       move(yCenter -1, xCenter);
-  //     case KEY_DOWN:
-  //       move(yCenter +1, xCenter);
-  //     default:
-  //       continue;
-  //   }
-  //   refresh();
-  // }
-
+  
   return 0;
-
 }
 
