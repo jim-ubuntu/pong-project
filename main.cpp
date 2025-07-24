@@ -4,11 +4,13 @@
 #include <string_view>
 #include <bits/stdc++.h>
 
+void gameplay(int xCenter, int yCenter);
+
 void welcomeScreen(int xCenter, int yCenter)
 {
   std::string ballArt[5] {"Pong", "---##---\n","-######-\n","-######-\n","---##---" };
   std::string welcomeToPong {"Welcome to pong\n"};
-  attron(COLOR_PAIR(2));
+  // attron(COLOR_PAIR(2));
   move(yCenter, xCenter - welcomeToPong.length()/2);
   printw(welcomeToPong.data());
   refresh();
@@ -19,7 +21,7 @@ void welcomeScreen(int xCenter, int yCenter)
     move(yCenter + (3-i), xCenter - ballArt[i].length()/2);
     printw(ballArt[i].data());
   }
-  attroff(COLOR_PAIR(2));
+  // attroff(COLOR_PAIR(2));
   getch();
   clear();
   refresh();
@@ -64,7 +66,7 @@ void menuScreen(int xCenter, int yCenter)
           }
         else if (selectedIndex % 2 ==0)
             // Will link to play screen from here. 
-            continue;
+           gameplay(xCenter, yCenter); 
         }
     }
     for (int i {0}; i<2; ++i)
@@ -72,9 +74,9 @@ void menuScreen(int xCenter, int yCenter)
       move(yCenter-1 + i, xCenter - 2);
       if (selectedIndex  %  2  == i)
       {
-      attron(COLOR_PAIR(2));
+      attron(COLOR_PAIR(3));
       printw(menuEntries[i].data());
-      attroff(COLOR_PAIR(2));
+      attroff(COLOR_PAIR(3));
       }
       else 
       {
@@ -90,9 +92,18 @@ void menuScreen(int xCenter, int yCenter)
 
 }
 
-void game()
+void gameplay(int xCenter, int yCenter)
 {
-
+  clear();
+  // WINDOW * gameWindow = newwin();
+  
+  for (int i {3}; i >=1; --i)
+  {
+    move(yCenter, xCenter);
+    printw("%d", i);
+    refresh();
+    sleep(1);
+  }
 }
 
 void playAgain()
@@ -105,11 +116,15 @@ int main()
   
   initscr();
   keypad(stdscr, TRUE);
-  int xCenter {getmaxx(stdscr)/2};
-  int yCenter {getmaxy(stdscr)/2};
+  const int xCenter {getmaxx(stdscr)/2};
+  const int yCenter {getmaxy(stdscr)/2};
+  const int& xCenterRef {xCenter};
+  const int& yCenterRef {yCenter};
+
   start_color();
   init_pair(1, COLOR_RED, COLOR_WHITE);
   init_pair(2, COLOR_GREEN, COLOR_BLACK);
+  init_pair(3, COLOR_WHITE, COLOR_GREEN);
   // cbreak();
   bool menu {true};
   int key {};
@@ -153,5 +168,5 @@ int main()
 
   return 0;
 
-
 }
+
