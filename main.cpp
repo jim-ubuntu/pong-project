@@ -14,7 +14,7 @@ void welcomeScreen(int xCenter, int yCenter)
   move(yCenter, xCenter - welcomeToPong.length()/2);
   printw(welcomeToPong.data());
   refresh();
-  getch();
+  sleep(3);
   clear();
   for (int i{0} ;i<=4; i++)
   {
@@ -22,13 +22,12 @@ void welcomeScreen(int xCenter, int yCenter)
     printw(ballArt[i].data());
   }
   // attroff(COLOR_PAIR(2));
-  getch();
-  clear();
   refresh();
+  clear();
+  sleep(3);
 }
-void menuScreen(int xCenter, int yCenter)
+void menuScreen(int xCenter, int yCenter, WINDOW * menuWindow)
 {
-  WINDOW *menuWindow = newwin(10, 40, yCenter -5, xCenter - 20); 
   std::vector<std::string> menuEntries {"Play", "Exit"};
   int keyPressed {};
   uint selectedIndex {0};
@@ -110,9 +109,9 @@ void gameplay(int xCenter, int yCenter)
   }
 }
 
-void playAgain()
+void playAgain(int xCenter, int yCenteri, WINDOW * menuWindow)
 {
-
+  
 }
 
 int main()
@@ -120,10 +119,14 @@ int main()
   
   initscr();
   keypad(stdscr, TRUE);
+  curs_set(0);
+
   const int xCenter {getmaxx(stdscr)/2};
   const int yCenter {getmaxy(stdscr)/2};
   const int& xCenterRef {xCenter};
   const int& yCenterRef {yCenter};
+
+  WINDOW *menuWindow = newwin(10, 40, yCenter -5, xCenter - 20); 
 
   start_color();
   init_pair(1, COLOR_RED, COLOR_WHITE);
@@ -140,8 +143,8 @@ int main()
 
   // box(win, 0, 0);
 
-  welcomeScreen(xCenter, yCenter); 
-  menuScreen(xCenter, yCenter); 
+  welcomeScreen(xCenterRef, yCenterRef); 
+  menuScreen(xCenterRef, yCenterRef, menuWindow); 
   // while (menu)
   // {
   //   

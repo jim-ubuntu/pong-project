@@ -8,8 +8,12 @@ Each menu selection will have all a sub procedure that either plays the game, or
 ---------------------------------------------------------  
 Game:
 
+Game starts with a countdown timer, then the game begins. So I will need a while loop after the initial timer finishes. This while loop continues until one of the players have scored 3 total. 
+
 The game has a start, someone serves or the ball is served by the PC 
 towards one of the players. 
+
+Upon reflection, making the arena the size of the entire screen is cumbersome. So I will need to make a minimum requirement for the terminal size to play the game. I will also, if I just make it into a executable, to open up a screen of the minimum required size to play. This screen will share dimensions with whatever I define for efficiency's sake.
 
 The ball must bounce off of the section that is the paddle
 this must also return at an angle equal to the incidental angle 
