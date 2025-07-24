@@ -16,7 +16,9 @@ void welcomeScreen(int xCenter, int yCenter)
   move(yCenter, xCenter - welcomeToPong.length()/2);
   printw(welcomeToPong.data());
   refresh();
-  sleep(3);
+  //timer screen off when testing...
+  // sleep(3);
+  getch();
   clear();
   for (int i{0} ;i<=4; i++)
   {
@@ -25,8 +27,10 @@ void welcomeScreen(int xCenter, int yCenter)
   }
   // attroff(COLOR_PAIR(2));
   refresh();
+  getch();
   clear();
-  sleep(3);
+  // timer screen off when testing...
+  // sleep(3);
 }
 void menuScreen(int xCenter, int yCenter, WINDOW * menuWindow)
 {
@@ -101,7 +105,7 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
 {
   clear();
   // WINDOW * gameWindow = newwin();
-  
+  WINDOW * gameSpace = newwin(20,40, yCenter-10, xCenter-20);
   for (int i {3}; i >=1; --i)
   {
     move(yCenter, xCenter);
@@ -109,6 +113,13 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     refresh();
     sleep(1);
   }
+  refresh();
+  box(gameSpace,0,0);
+  wrefresh(gameSpace);
+  refresh();
+  getch();
+  clear();
+  refresh();
   playAgain(xCenter,yCenter,menuWindow);
   return;
 }
@@ -119,7 +130,6 @@ void playAgain(int xCenter, int yCenter, WINDOW * menuWindow)
   constexpr bool endScreen {true};
   uint selectedIndex {0};
   int keyPressed {};
-
   while (endScreen)
   {
     switch(keyPressed)
@@ -147,27 +157,26 @@ void playAgain(int xCenter, int yCenter, WINDOW * menuWindow)
           std::exit(0);
         }
       }
-        // default:
-        // break;
+      default:
+        break;
     }
     box(menuWindow, 0,0);
-    wrefresh(menuWindow);
     move(yCenter - 5, xCenter -19);
     printw("Game Over");
-    refresh();
+    wrefresh(menuWindow);
 
     for (int i {0}; i < 2; ++i)
     {
       if (selectedIndex % 2 == i)
       {
         attron(COLOR_PAIR(3));
-        move(yCenter-1 + i, xCenter);
+        move(yCenter-1 + i, xCenter - menuEntries[i].length()/2);
         printw(menuEntries[i].data());
       attroff(COLOR_PAIR(3));
       }
       else 
       {
-        move(yCenter-1 + i, xCenter);
+        move(yCenter-1 + i, xCenter - menuEntries[i].length()/2);
         printw(menuEntries[i].data());
       }
     }
