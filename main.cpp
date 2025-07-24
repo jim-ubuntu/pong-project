@@ -35,13 +35,10 @@ void menuScreen(int xCenter, int yCenter)
   //I want to make an array and enable cycling through the 
     // array and highlighting the selection.
   int menuLength {static_cast<int>(menuEntries.size())};
-  box(menuWindow, 0,0);
   refresh();
-  wrefresh(menuWindow);
-  move(yCenter - 5, xCenter -19);
-  printw("Welcome");
   while (keyPressed != 'q')
   {
+    
     // wrefresh(menuWindow);
     switch(keyPressed)
     {
@@ -67,8 +64,16 @@ void menuScreen(int xCenter, int yCenter)
         else if (selectedIndex % 2 ==0)
             // Will link to play screen from here. 
            gameplay(xCenter, yCenter); 
+           break;
         }
     }
+
+    box(menuWindow, 0,0);
+    wrefresh(menuWindow);
+    move(yCenter - 5, xCenter -19);
+    printw("Welcome");
+    refresh();
+
     for (int i {0}; i<2; ++i)
     {
       move(yCenter-1 + i, xCenter - 2);
@@ -82,10 +87,9 @@ void menuScreen(int xCenter, int yCenter)
       {
          printw(menuEntries[i].data());
       }
-      
+    refresh();
     }
     keyPressed = getch();
-    refresh();
   }
   refresh();
   getch();
@@ -124,7 +128,7 @@ int main()
   start_color();
   init_pair(1, COLOR_RED, COLOR_WHITE);
   init_pair(2, COLOR_GREEN, COLOR_BLACK);
-  init_pair(3, COLOR_WHITE, COLOR_GREEN);
+  init_pair(3, COLOR_BLACK, COLOR_GREEN);
   // cbreak();
   bool menu {true};
   int key {};
