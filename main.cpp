@@ -139,9 +139,10 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
        }
        }
   }
-  wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
-  wrefresh(gameSpace);
-  refresh();
+
+  // wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
+  // wrefresh(gameSpace);
+  // refresh();
 
   while (game)
   {
@@ -155,7 +156,6 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
 
   }
 
-  getch();
   clear();
   refresh();
   playAgain(xCenter,yCenter,menuWindow);
