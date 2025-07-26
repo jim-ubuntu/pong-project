@@ -118,8 +118,8 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
 
 
   // box(gameSpace,0,0);
+  wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
   wrefresh(gameSpace);
-  wborder(gameSpace,0,0,0,0,0,0,0,0);
   for (int i {3}; i >=0; --i)
   {
     switch(i)
@@ -154,7 +154,10 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     
           clear();
           game = false; 
-          break;
+          // break;
+          clear();
+          refresh();
+          playAgain(xCenter,yCenter,menuWindow);
         }
       case KEY_DOWN:
         {
@@ -177,7 +180,7 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     // clear();
     move(playerYCoord , xCenter-(courtWidth/2));
     attron(COLOR_PAIR(4));
-    printw("|");
+    printw(" ");
     attroff(COLOR_PAIR(4));
     wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
 
@@ -186,10 +189,6 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     refresh();
     playerInput = getch();
   }
-
-  clear();
-  refresh();
-  playAgain(xCenter,yCenter,menuWindow);
 
 }
 
