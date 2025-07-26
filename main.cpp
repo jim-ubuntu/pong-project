@@ -115,10 +115,8 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
 
 
   // box(gameSpace,0,0);
-  // wrefresh(gameSpace);
-  // wborder(gameSpace,0,0,0,0,0,0,0,0);
-  wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
   wrefresh(gameSpace);
+  wborder(gameSpace,0,0,0,0,0,0,0,0);
   for (int i {3}; i >=0; --i)
   {
     switch(i)
@@ -140,20 +138,23 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
        }
   }
 
-  // wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
-  // wrefresh(gameSpace);
-  // refresh();
-
+  wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
+  wrefresh(gameSpace);
+  refresh();
+  wrefresh(gameSpace);
+  refresh();
   while (game)
   {
-    if (input == '\n'){
+    
+    if (input == '\n')
+    {
       clear();
       game = false; 
+      break;
     }
     wrefresh(gameSpace);
     refresh();
     input = getch();
-
   }
 
   clear();
