@@ -108,7 +108,10 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
   constexpr int courtHeight {20};
   constexpr int courtWidth{60};
   bool game {true};
-  int input {};
+  int playerInput {};
+  int playerYStart {yCenter};
+  int playerYCoord {playerYStart};
+  int paddleSize {3};
 
   WINDOW * gameSpace = newwin(courtHeight,courtWidth, yCenter-(courtHeight/2), xCenter-(courtWidth/2));
   refresh();
@@ -137,7 +140,6 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
        }
        }
   }
-
   wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
   wrefresh(gameSpace);
   refresh();
@@ -145,16 +147,44 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
   refresh();
   while (game)
   {
-    
-    if (input == '\n')
+    switch(playerInput)
     {
-      clear();
-      game = false; 
-      break;
+      case 113:
+        {
+    
+          clear();
+          game = false; 
+          break;
+        }
+      case KEY_DOWN:
+        {
+          if (playerYCoord < yCenter + (courtHeight/2 -2))
+          {
+            playerYCoord += 1;
+          }
+          break;
+        }
+      case KEY_UP:
+        {
+
+          if (playerYCoord > yCenter -  (courtHeight/2 -1))
+          {
+            playerYCoord -= 1;
+          }
+          break;
+        }
     }
+    // clear();
+    move(playerYCoord , xCenter-(courtWidth/2));
+    attron(COLOR_PAIR(4));
+    printw("|");
+    attroff(COLOR_PAIR(4));
+    wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
+
+
     wrefresh(gameSpace);
     refresh();
-    input = getch();
+    playerInput = getch();
   }
 
   clear();
