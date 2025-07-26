@@ -105,23 +105,61 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
 {
   clear();
   // WINDOW * gameWindow = newwin();
-  WINDOW * gameSpace = newwin(20,40, yCenter-10, xCenter-20);
-  for (int i {3}; i >=1; --i)
-  {
-    move(yCenter, xCenter);
-    printw("%d", i);
-    refresh();
-    sleep(1);
-  }
+  constexpr int courtHeight {20};
+  constexpr int courtWidth{60};
+  bool game {true};
+  int input {};
+
+  WINDOW * gameSpace = newwin(courtHeight,courtWidth, yCenter-(courtHeight/2), xCenter-(courtWidth/2));
   refresh();
-  box(gameSpace,0,0);
+
+
+  // box(gameSpace,0,0);
+  // wrefresh(gameSpace);
+  // wborder(gameSpace,0,0,0,0,0,0,0,0);
+  wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
+  wrefresh(gameSpace);
+  for (int i {3}; i >=0; --i)
+  {
+    switch(i)
+      {
+        case 0:
+        {
+          move(yCenter,xCenter);
+          printw("");
+          break;
+        }
+        default:
+       {       
+        move(yCenter, xCenter);
+        printw("%d", i);
+        refresh();
+        sleep(1);
+        break;
+       }
+       }
+  }
+  wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
   wrefresh(gameSpace);
   refresh();
+
+  while (game)
+  {
+    if (input == '\n'){
+      clear();
+      game = false; 
+    }
+    wrefresh(gameSpace);
+    refresh();
+    input = getch();
+
+  }
+
   getch();
   clear();
   refresh();
   playAgain(xCenter,yCenter,menuWindow);
-  return;
+
 }
 
 void playAgain(int xCenter, int yCenter, WINDOW * menuWindow)
@@ -191,6 +229,7 @@ int main()
   initscr();
   keypad(stdscr, TRUE);
   curs_set(0);
+  noecho();
 
   const int xCenter {getmaxx(stdscr)/2};
   const int yCenter {getmaxy(stdscr)/2};
@@ -203,6 +242,7 @@ int main()
   init_pair(1, COLOR_RED, COLOR_WHITE);
   init_pair(2, COLOR_GREEN, COLOR_BLACK);
   init_pair(3, COLOR_BLACK, COLOR_GREEN);
+  init_pair(4, COLOR_BLUE, COLOR_BLACK);
   // cbreak();
   bool menu {true};
   int key {};
