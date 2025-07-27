@@ -1,9 +1,11 @@
 #include <cstdlib>
 #include <ncurses.h>
+#include <random>
 #include <string>
 #include <string_view>
 #include <bits/stdc++.h>
 #include <vector>
+#include "random.h"
 
 void gameplay(int xCenter, int yCenter, WINDOW * menuWindow);
 void playAgain(int xCenter, int yCenter, WINDOW * menuWindow);
@@ -107,15 +109,22 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
   // WINDOW * gameWindow = newwin();
   constexpr int courtHeight {20};
   constexpr int courtWidth{60};
-  bool game {true};
+  bool gameInPlay {true};
+  bool movingToLeft {true};
   int playerInput {};
   int playerYStart {yCenter};
   int playerYCoord {playerYStart};
   int paddleSize {3};
-
+  int ballXCoord {xCenter};
+  int ballYCoord {yCenter};
+  int playerScore {};
+  int cpuScore {};
+  std::mt19937 seed {PRNG::mtSeedObject()};  
+  std::mt19937 mt{seed};
+  
   WINDOW * gameSpace = newwin(courtHeight,courtWidth, yCenter-(courtHeight/2), xCenter-(courtWidth/2));
   refresh();
-
+  
 
   // box(gameSpace,0,0);
   wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
@@ -184,6 +193,50 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     attroff(COLOR_PAIR(4));
     wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
 
+
+    //The calculation of the ball takes place last as it is dependent on the location of the location of the paddles. 
+
+   // The ball starts either going left or right at random using RNG initially, then it serves to the loser.  
+    // Need to know when a game starts and ends. If the ball passes a player, thta game ends. 
+    //
+  // This is the serve logic
+  if (playerScore == cpuScore)
+    {
+      switch(PRNG::getRandom(mt, 1, 2))
+      {
+        case 1:
+          {
+            movingToLeft = true;
+            break;
+          }
+        case 2:
+          {
+            movingToLeft = false;
+            break;
+          }
+      }
+    
+    }
+  else 
+    {
+      if (playerScore > cpuScore)  
+        {
+          movingToLeft = false;
+        } 
+      else 
+        {
+          movingToLeft = true;  
+        }
+    }
+    //This is the end of the serve logic.
+
+  //Logic to move the ball...
+
+
+
+  //logic to move the ball ends here...
+    
+    
 
     wrefresh(gameSpace);
     refresh();
@@ -273,6 +326,7 @@ int main()
   init_pair(2, COLOR_GREEN, COLOR_BLACK);
   init_pair(3, COLOR_BLACK, COLOR_GREEN);
   init_pair(4, COLOR_BLACK, COLOR_BLUE);
+  init_pair(5, COLOR_BLACK, COLOR_RED);
   // cbreak();
   bool menu {true};
   int key {};

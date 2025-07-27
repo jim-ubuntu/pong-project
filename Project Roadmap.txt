@@ -17,6 +17,12 @@ Upon reflection, making the arena the size of the entire screen is cumbersome. S
 
 The screen must refresh regularly, so getch() is useless. Sleep only works with integers as well. So I want the screen to constantly update, or using a smaller interval than 1 second. ideally updating every 0.1seconds would be good. 
 
+The ball. I will use PRNG to make the ball start going left or right. Then I need to account for bouncing. When printing the ball to the window/screen, it is bound by the coordinates of the screen. When it reaches yCenter + height/2 it bounces and vice versa. When it hits a paddle i.e a paddle and it share the abscissa (x coord) of either xCenter - width/2 or xCenter + width/2. 
+
+The CPU paddle, shouldn't just mindlessly wonder, it's movement should follow the ball. It should follow with in 4 vertical pixels of the ball. We also need to determine how often it will hit the ball. PRNG is suitable to achieve both of these. 
+
+PRNG also can be used to determine who gets the ball in the first serve, then subsequently the loser will be the one served to. 
+
 
 The ball must bounce off of the section that is the paddle
 this must also return at an angle equal to the incidental angle 
