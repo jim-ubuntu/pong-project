@@ -111,14 +111,16 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
   constexpr int courtWidth{60};
   bool gameInPlay {true};
   bool movingToLeft {true};
+  bool movingUp {};
+  bool startOfMatch {true};
   int playerInput {};
   int playerYStart {yCenter};
   int playerYCoord {playerYStart};
   int paddleSize {3};
   int ballXCoord {xCenter};
   int ballYCoord {yCenter};
-  int playerScore {};
-  int cpuScore {};
+  int playerScore {0};
+  int cpuScore {0};
   std::mt19937 seed {PRNG::mtSeedObject()};  
   std::mt19937 mt{seed};
   
@@ -154,7 +156,7 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
   refresh();
   wrefresh(gameSpace);
   refresh();
-  while (game)
+  while (gameInPlay)
   {
     switch(playerInput)
     {
@@ -162,7 +164,7 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
         {
     
           clear();
-          game = false; 
+          gameInPlay = false; 
           // break;
           clear();
           refresh();
@@ -185,6 +187,10 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
           }
           break;
         }
+      default:
+        {
+          break;
+        }
     }
     // clear();
     move(playerYCoord , xCenter-(courtWidth/2));
@@ -192,7 +198,7 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     printw(" ");
     attroff(COLOR_PAIR(4));
     wborder(gameSpace, '%s' , '%s' , 0,0,0,0,0,0);
-
+    wrefresh(gameSpace);
 
     //The calculation of the ball takes place last as it is dependent on the location of the location of the paddles. 
 
@@ -200,7 +206,10 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
     // Need to know when a game starts and ends. If the ball passes a player, thta game ends. 
     //
   // This is the serve logic
-  if (playerScore == cpuScore)
+  // It must also be the START of a match and not in the middle...
+  // The switches below only set the initial direction...
+    // Start of match switches off after serve. 
+  if (playerScore == cpuScore && startOfMatch)
     {
       switch(PRNG::getRandom(mt, 1, 2))
       {
@@ -215,38 +224,70 @@ void gameplay(int xCenter, int yCenter, WINDOW * menuWindow)
             break;
           }
       }
-    
+    startOfMatch = false; 
     }
-  else 
+  else if (playerScore > cpuScore && startOfMatch) 
     {
-      if (playerScore > cpuScore)  
-        {
-          movingToLeft = false;
-        } 
-      else 
-        {
-          movingToLeft = true;  
-        }
+      movingToLeft = false;
+      startOfMatch = false; 
+    } 
+  else if (playerScore < cpuScore && startOfMatch)
+    {
+      movingToLeft = true;  
+      startOfMatch = false; 
     }
-    //This is the end of the serve logic.
-
-  //Logic to move the ball...
-
-
-
+  
+  //   //This is the end of the serve logic.
+  //
+  // //Logic to move the ball...
+  if (movingToLeft)
+  {
+    if (ballXCoord <= (xCenter - courtWidth/2 +2 ))
+    {
+      movingToLeft = false;
+    }
+    --ballXCoord;
+  }
+  else 
+  {
+    if (ballXCoord >= (xCenter + courtWidth/2 -4))
+    {
+      movingToLeft = true;
+       
+    }
+    ++ballXCoord;
+  }
+  if (movingUp)
+  {
+  if (ballYCoord == (yCenter - courtHeight/2 +2 ))
+    {
+      movingUp = false;
+    }
+    -- ballYCoord;
+  }
+  else 
+  {
+    if (ballYCoord == (yCenter + courtHeight/2 - 3))
+    {
+      movingUp = true;
+    }
+    ++ ballYCoord;
+  }
   //logic to move the ball ends here...
     
     
-
+    move(ballYCoord,ballXCoord);
+    printw("@");
     wrefresh(gameSpace);
     refresh();
     playerInput = getch();
   }
-
 }
 
+
+
 void playAgain(int xCenter, int yCenter, WINDOW * menuWindow)
-{
+{ 
   std::vector<std::string> menuEntries {"Play again", "Exit"};
   constexpr bool endScreen {true};
   uint selectedIndex {0};
@@ -306,9 +347,9 @@ void playAgain(int xCenter, int yCenter, WINDOW * menuWindow)
   }
 }
 
+
 int main()
-{
-  
+{  
   initscr();
   keypad(stdscr, TRUE);
   curs_set(0);
@@ -335,5 +376,7 @@ int main()
   menuScreen(xCenterRef, yCenterRef, menuWindow); 
   
   return 0;
-}
 
+     
+}
+ 
